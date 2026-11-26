@@ -1,3 +1,48 @@
+V4.0.32 (2026.11.26)
+-DialogSelect bigger 
+
+
+V4.0.31 (2026.11.25)
+-fix volume at home if volume is 0% - issue from glassfire8 - thanks
+-Add progress/cache percentage next to progress bar + (hidden function PlayerDebug)
+
+V4.0.30 (2026.11.24)
+-add MPAA rating, Studio
+
+V4.0.29 (2026.11.22)
+-update visibility VideoOSD 
+-First change keyboard
+
+V4.0.28 (2026.11.19)
+-change subtitles switch to image 
+-OSD Real time like Estuary with time end of movie
+
+V4.0.27 (2026.11.18)
+-navigate on keyboard
+-some change on VideoOSD
+
+
+V4.0.22 (2026.11.16)
+-change fanart and icons
+-update strings in En-GB
+-some adds in VideoOSD
+
+
+V4.0.18 (2026.11.15)
+-Adding remote control support 
+
+
+V4.0.15 (2026.11.12)
+-Change size, pos in the VideosOSD player buttons
+-Add label for actual sub language under the sub button
+-Change moving in the home.xml with keyboard
+
+V4.0.10
+- Add date to Home / Header
+- Add Sub button to the VideoOSD control buttons
+- Change color, size, pos in the VideosOSD player buttons
+- Remove Close VideoOSD button and change to onclick
+
 V3.0.3
 - Add chapter indicators to the progress bar
 - Add sort method / sort order / Channel group options to the PVR sections

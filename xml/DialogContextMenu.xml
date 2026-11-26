@@ -49,9 +49,10 @@
 			<posx>0</posx>
 			<posy></posy>
 			<width>400</width>
-			<height>70</height>
+			<height>140</height>
 			<font>font25</font>
 			<align>center</align>
+			<scroll>true</scroll>
 			<texturefocus>list_focus.png</texturefocus>
 			<texturenofocus></texturenofocus>
 		</control>

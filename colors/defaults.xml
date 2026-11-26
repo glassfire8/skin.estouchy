@@ -6,5 +6,7 @@
 	<color name="grey3">FF2C2C2C</color>
 	<color name="black">FF000000</color>
 	<color name="blue">FF12B2E7</color>
+	<color name="blue1">8012B2E7</color>
+	<color name="blue2">FF12B2E7</color>
 	<color name="selected">FF11E7B1</color>
 </colors>

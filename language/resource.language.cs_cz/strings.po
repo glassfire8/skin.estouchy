@@ -25,6 +25,10 @@ msgctxt "Addon Description"
 msgid "Skin designed to be used on touchscreen devices like tablets and smartphones"
 msgstr "Vzhled navržený pro použití na zařízeních s dotykovou obrazovkou, jako jsou tablety a chytré telefony"
 
+msgctxt "#31001"
+msgid "Actual Time"
+msgstr "Aktuální čas"
+
 msgctxt "#31002"
 msgid "Audio Settings"
 msgstr "Nastavení zvuku"
@@ -142,9 +146,13 @@ msgctxt "#31046"
 msgid "Play speed"
 msgstr "Rychlost přehrávání"
 
+msgctxt "#31047"
+msgid "Battery"
+msgstr "Baterie"
+
 msgctxt "#31049"
 msgid "End Time"
-msgstr "Čas ukončení"
+msgstr "Konec v"
 
 msgctxt "#31050"
 msgid "Sort: Ascending"
@@ -217,6 +225,10 @@ msgstr "Nabídka videa"
 msgctxt "#31356"
 msgid "Download Subtitles"
 msgstr "Stáhnout titulky"
+
+msgctxt "#31357"
+msgid "Subs"
+msgstr "Tit."
 
 msgctxt "#31358"
 msgid "Teletext"

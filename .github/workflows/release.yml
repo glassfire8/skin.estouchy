@@ -1,0 +1,84 @@
+name: Vytvorit Kodi Skin Release a aktualizovat Repo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stažení kódu skinu
+        uses: actions/checkout@v4
+
+      - name: Kontrola verze v addon.xml
+        id: check_version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADDON_ID=$(python3 -c "import xml.etree.ElementTree as ET; print(ET.parse('addon.xml').getroot().attrib['id'])")
+          VERSION=$(python3 -c "import xml.etree.ElementTree as ET; print(ET.parse('addon.xml').getroot().attrib['version'])")
+          TAG="v${VERSION}"
+
+          echo "addon_id=$ADDON_ID" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Zabalení skinu do ZIPu pro Kodi
+        if: steps.check_version.outputs.exists == 'false'
+        run: |
+          ADDON_ID="${{ steps.check_version.outputs.addon_id }}"
+          VERSION="${{ steps.check_version.outputs.version }}"
+
+          mkdir -p build/$ADDON_ID
+          rsync -av --exclude='.git*' --exclude='build' . build/$ADDON_ID/
+
+          cd build
+          zip -r "../${ADDON_ID}-${VERSION}.zip" "$ADDON_ID"
+          cd ..
+
+      - name: Vytvoření GitHub Release
+        if: steps.check_version.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.check_version.outputs.tag }}
+          name: Verze ${{ steps.check_version.outputs.version }}
+          files: ${{ steps.check_version.outputs.addon_id }}-${{ steps.check_version.outputs.version }}.zip
+          generate_release_notes: true
+
+      - name: Stažení repository.malyslon
+        if: steps.check_version.outputs.exists == 'false'
+        uses: actions/checkout@v4
+        with:
+          repository: Jencek007/repository.malyslon
+          token: ${{ secrets.REPO_TOKEN }}
+          path: temp_repo
+
+      - name: Aktualizace repository.malyslon
+        if: steps.check_version.outputs.exists == 'false'
+        run: |
+          # Smazání starých souborů skinu a nakopírování nových
+          rm -rf temp_repo/skin.estouchy/*
+          rsync -av --exclude='.git*' --exclude='build' --exclude='temp_repo' --exclude='*.zip' . temp_repo/skin.estouchy/
+
+          # Spuštění vašeho skriptu generate_repo.py
+          cd temp_repo
+          python3 generate_repo.py
+
+          # Odeslání změn zpět do repository.malyslon
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add .
+          git commit -m "Automaticka aktualizace skin.estouchy na verzi ${{ steps.check_version.outputs.version }}"
+          git push

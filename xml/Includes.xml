@@ -41,6 +41,18 @@
 		<value condition="Window.IsVisible(MusicOSD) + MusicPlayer.HasNext">$LOCALIZE[209]: $INFO[MusicPlayer.offset(1).Artist,, - ]$INFO[MusicPlayer.offset(1).Title]</value>
 		<value condition="Window.IsVisible(VideoOSD)">$LOCALIZE[31049] $INFO[Player.FinishTime]</value>
 	</variable>
+	<variable name="OSDLabel6">
+		<value condition="Window.IsVisible(MusicOSD) + MusicPlayer.HasNext">$LOCALIZE[209]: $INFO[MusicPlayer.offset(1).Artist,, - ]$INFO[MusicPlayer.offset(1).Title]</value>
+		<value condition="Window.IsVisible(VideoOSD)">$LOCALIZE[31047] $INFO[System.BatteryLevel]</value>
+	</variable>
+	<variable name="OSDLabel7">
+		<value condition="Window.IsVisible(VideoOSD)">$LOCALIZE[31357]</value>
+	</variable>
+	<variable name="BatteryColor">
+		<value condition="Integer.IsLessOrEqual(System.BatteryLevel,15)">FFFF0000</value>
+		<value condition="Integer.IsLessOrEqual(System.BatteryLevel,30)">FFFFA500</value>
+		<value>FF00FF00</value>
+	</variable>
 	<variable name="PosterThumb">
 		<value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
 		<value condition="String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Icon]</value>
@@ -234,13 +246,13 @@
 			<posx>415r</posx>
 			<posy>16</posy>
 			<width>400</width>
-			<height>70</height>
+			<height>90</height>
 			<align>right</align>
 			<itemgap>10</itemgap>
-			<orientation>horizontal</orientation>
+			<orientation>vertical</orientation>
 			<control type="label">
 				<description>System Time</description>
-				<height>70</height>
+				<height>50</height>
 				<width>400</width>
 				<font>font70_title</font>
 				<textcolor>white</textcolor>
@@ -248,8 +260,20 @@
 				<aligny>center</aligny>
 				<label>$INFO[System.Time]</label>
 			</control>
+			<control type="label">
+				<description>System Date</description>
+				<height>25</height>
+				<width>400</width>
+				<font>font20</font>
+				<textcolor>grey</textcolor>
+				<align>right</align>
+				<aligny>center</aligny>
+				<textoffsetx>5</textoffsetx>
+				<label>$INFO[System.Date]</label>
+			</control>
 		</control>
 	</include>
+
 	<include name="Footer">
 		<control type="image">
 			<posx>0</posx>
@@ -315,12 +339,12 @@
 		<font>font24_title</font>
 		<textcolor>white</textcolor>
 	</include>
-	<include name="ScrollBarCommons">
+		<include name="ScrollBarCommons">
 		<control type="group">
 			<include>Window_OpenClose_Animation</include>
 			<posx>40r</posx>
 			<posy>120</posy>
-			<visible>Control.IsVisible(60) + ![[Window.IsVisible(TVGuide) | Window.IsVisible(RadioGuide)] + Control.IsVisible(10)]</visible>
+			<visible>![[Window.IsVisible(TVGuide) | Window.IsVisible(RadioGuide)] + Control.IsVisible(10)]</visible>
 			<animation effect="slide" start="40,0" end="0,0" time="400">Visible</animation>
 			<animation effect="slide" start="0,0" end="40,0" time="400">Hidden</animation>
 			<animation effect="slide" start="0,0" end="-7,0" time="0" condition="String.IsEqual(Skin.AspectRatio,4:3)">Conditional</animation>
@@ -334,8 +358,8 @@
 				<texturesliderbarfocus colordiffuse="blue">white.png</texturesliderbarfocus>
 				<textureslidernib>blank.png</textureslidernib>
 				<textureslidernibfocus>blank.png</textureslidernibfocus>
-				<onleft>60</onleft>
-				<onright>60</onright>
+				<onleft>50,500,550</onleft>
+				<onright>9002</onright>
 				<ondown>60</ondown>
 				<onup>60</onup>
 				<showonepage>false</showonepage>
@@ -411,6 +435,9 @@
 				</item>
 				<item>
 					<label>31202</label>
+					<onclick condition="Control.IsVisible(50)">SetFocus(50)</onclick>
+					<onclick condition="Control.IsVisible(500)">SetFocus(500)</onclick>
+					<onclick condition="Control.IsVisible(550)">SetFocus(550)</onclick>
 					<onclick>Container.NextViewMode</onclick>
 					<icon>icon_button_view.png</icon>
 					<visible>![Window.IsVisible(TVChannels) | Window.IsVisible(RadioChannels) | Window.IsVisible(TVGuide) | Window.IsVisible(RadioGuide) | Window.IsVisible(TVRecordings) | Window.IsVisible(RadioRecordings) | Window.IsVisible(TVTimers) | Window.IsVisible(RadioTimers) | Window.IsVisible(TVTimerRules) | Window.IsVisible(RadioTimerRules) | Window.IsVisible(TVSearch) | Window.IsVisible(RadioSearch) | Window.IsVisible(MusicOSD) | Window.IsVisible(VideoOSD) | Window.IsVisible(MusicPlaylist) | Window.IsVisible(VideoPlaylist) | Window.IsVisible(MusicPlaylistEditor)]</visible>
@@ -423,10 +450,11 @@
 					<visible>Window.IsVisible(TVChannels) | Window.IsVisible(RadioChannels) | Window.IsVisible(TVGuide) | Window.IsVisible(RadioGuide) | Window.IsVisible(TVRecordings) | Window.IsVisible(RadioRecordings) | Window.IsVisible(TVTimers) | Window.IsVisible(RadioTimers) | Window.IsVisible(TVTimerRules) | Window.IsVisible(RadioTimerRules) | Window.IsVisible(TVSearch) | Window.IsVisible(RadioSearch)</visible>
 				</item>
 				<item>
-					<label>5</label>
-					<onclick condition="String.IsEmpty(Window(Home).Property(PopupMenuVisible))">SetProperty(PopupMenuVisible,Show,Home)</onclick>
-					<onclick condition="!String.IsEmpty(Window(Home).Property(PopupMenuVisible))">ClearProperty(PopupMenuVisible,Home)</onclick>
-					<icon>icon_button_settings.png</icon>
+				    <label>5</label>
+    				<onclick condition="String.IsEmpty(Window(Home).Property(PopupMenuVisible))">SetProperty(PopupMenuVisible,Show,Home)</onclick>
+    				<onclick condition="!String.IsEmpty(Window(Home).Property(PopupMenuVisible))">ClearProperty(PopupMenuVisible,Home)</onclick>
+    				<onclick>AlarmClock(focusmenu,SetFocus(9003),00:00,silent)</onclick>
+    				<icon>icon_button_settings.png</icon>
 				</item>
 			</content>
 		</control>
@@ -445,7 +473,12 @@
 		<height>120</height>
 		<onleft>9002</onleft>
 		<onright>9002</onright>
-		<onup>9001</onup>
+		<onup condition="Window.IsVisible(VideoOSD)">203</onup>
+		<onup condition="!String.IsEmpty(Window(Home).Property(PopupMenuVisible))">9003</onup>
+		<onup condition="Window.IsVisible(Home)">9001</onup>
+		<onup condition="!Window.IsVisible(Home) + String.IsEmpty(Window(Home).Property(PopupMenuVisible)) + Control.IsVisible(50)">50</onup>
+		<onup condition="!Window.IsVisible(Home) + String.IsEmpty(Window(Home).Property(PopupMenuVisible)) + Control.IsVisible(500)">500</onup>
+		<onup condition="!Window.IsVisible(Home) + String.IsEmpty(Window(Home).Property(PopupMenuVisible)) + Control.IsVisible(550)">550</onup>
 		<ondown>20</ondown>
 		<scrolltime>300</scrolltime>
 		<orientation>Horizontal</orientation>
@@ -699,6 +732,10 @@
 				<posy>80</posy>
 				<width>100</width>
 				<height>800</height>
+				<onright condition="Control.IsVisible(50)">50</onright>
+				<onright condition="Control.IsVisible(500)">500</onright>
+				<onright condition="Control.IsVisible(550)">550</onright>
+				<ondown>9002</ondown>
 				<itemlayout width="100" height="100">
 					<control type="image">
 						<posx>10</posx>
@@ -804,7 +841,7 @@
 				<width>500</width>
 				<height>760</height>
 				<onleft>9000</onleft>
-				<onright>9003</onright>
+				<onright>2010</onright>
 				<onup>9002</onup>
 				<ondown>9002</ondown>
 				<scrolltime>300</scrolltime>
@@ -1039,15 +1076,16 @@
 					<height>$PARAM[panel-height]</height>
 					<texture>dialog_back.png</texture>
 				</control>
-				<control type="grouplist">
+					<control type="grouplist" id="9003">
 					<posx>0</posx>
 					<posy>$PARAM[panel-posy]</posy>
 					<width>350</width>
 					<height>640</height>
-					<onleft>9000</onleft>
-					<onright>50</onright>
-					<onup>9000</onup>
-					<ondown>9000</ondown>
+					<orientation>vertical</orientation>
+					<onleft>9002</onleft>
+					<onright>9002</onright>
+					<onup>9003</onup>
+					<ondown>9003</ondown>
 					<itemgap>0</itemgap>
 					<include condition="Window.IsVisible(AddonBrowser)">AddonsMenu</include>
 					<include condition="Window.IsVisible(EventLog)">EventLogMenu</include>
@@ -1624,7 +1662,7 @@
 			<height>640</height>
 			<itemgap>-1</itemgap>
 			<onleft>3</onleft>
-			<onright>3</onright>
+			<onright>9002</onright>
 			<onup>5</onup>
 			<ondown>5</ondown>
 		</control>
@@ -1843,7 +1881,7 @@
 			<onup>100</onup>
 			<ondown>9002</ondown>
 			<onleft>9</onleft>
-			<onright>60</onright>
+			<onright>9002</onright>
 			<visible>Skin.String(SkinSettings,1)</visible>
 			<control type="radiobutton" id="102">
 				<description>Show LiveTV</description>
@@ -2026,7 +2064,7 @@
 			<onup>200</onup>
 			<ondown>9002</ondown>
 			<onleft>9</onleft>
-			<onright>60</onright>
+			<onright>9002</onright>
 			<visible>Skin.String(SkinSettings,2)</visible>
 			<control type="button" id="202">
 				<description>Home Addon Button</description>
@@ -2264,7 +2302,7 @@
 			<onup>200</onup>
 			<ondown>9002</ondown>
 			<onleft>9</onleft>
-			<onright>60</onright>
+			<onright>9002</onright>
 			<visible>Skin.String(SkinSettings,3)</visible>
 			<control type="radiobutton" id="115">
 				<description>Use custom background</description>
@@ -2479,7 +2517,10 @@
 			<texturesliderbarfocus colordiffuse="blue">white.png</texturesliderbarfocus>
 			<textureslidernib>blank.png</textureslidernib>
 			<textureslidernibfocus>blank.png</textureslidernibfocus>
-			<onleft>9000</onleft>
+			<onleft>50,500,550</onleft>
+			<onright>9002</onright>
+			<ondown>60</ondown>
+			<onup>60</onup>
 			<showonepage>false</showonepage>
 			<orientation>vertical</orientation>
 			<animation effect="fade" time="150">Visible</animation>
@@ -2546,63 +2587,63 @@
 		</control>
 	</include>
 	<include name="VideoOSDMenu">
-		<control type="button">
+		<control type="button" id="9010">
 			<label>19019</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(PVROSDChannels)</onclick>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9011">
 			<label>19222</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(pvrchannelguide)</onclick>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9012">
 			<label>31358</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(Teletext)</onclick>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9013">
 			<label>13395</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(osdvideosettings)</onclick>
 		</control>
-		<control type="button">
+		<control type="button" id="9014">
 			<label>31002</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(osdaudiosettings)</onclick>
 		</control>
-		<control type="button">
+		<control type="button" id="9015">
 			<label>24133</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(osdsubtitlesettings)</onclick>
 		</control>
-		<control type="button">
+		<control type="button" id="9016">
 			<label>298</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ActivateWindow(videobookmarks)</onclick>
 		</control>
-		<control type="button">
+		<control type="button" id="9017">
 			<label>$LOCALIZE[486]$INFO[Playlist.Repeat, : ]</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>PlayerControl(Repeat)</onclick>
 			<visible>!VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9018">
 			<label>$LOCALIZE[590]$INFO[Playlist.Random, : ]</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>PlayerControl(Random)</onclick>
 			<visible>!VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9019">
 			<label>31355</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>PlayerControl(ShowVideoMenu)</onclick>
 			<visible>VideoPlayer.HasMenu + !VideoPlayer.Content(LiveTV)</visible>
 		</control>
-		<control type="button">
+		<control type="button" id="9020">
 			<label>31015</label>
 			<include>MenuButtonCommonValues</include>
 			<onclick>ClearProperty(PopupMenuVisible,Home)</onclick>
@@ -2632,18 +2673,20 @@
 			<include>MenuButtonCommonValues</include>
 		</control>
 	</include>
-	<include name="YesNoDefaultButtons">
+		<include name="YesNoDefaultButtons">
 		<control type="group">
 			<posx>145</posx>
 			<posy>240</posy>
 			<width>660</width>
 			<height>60</height>
-			<visible>Window.IsVisible(yesnodialog)</visible>
+			<visible>Window.IsVisible(confirmdialog)</visible>
 			<control type="button" id="11">
 				<description>Yes button</description>
 				<posx>0</posx>
 				<posy>0</posy>
 				<width>200</width>
+				<onleft>10</onleft>
+				<onright>10</onright>
 				<include>ButtonInfoDialogsCommonValues</include>
 			</control>
 			<control type="button" id="10">
@@ -2651,10 +2694,13 @@
 				<posx>210</posx>
 				<posy>0</posy>
 				<width>200</width>
+				<onleft>11</onleft>
+				<onright>11</onright>
 				<include>ButtonInfoDialogsCommonValues</include>
 			</control>
 		</control>
 	</include>
+
 	<include name="YesNoExtendedButtons">
 		<control type="grouplist" id="9000">
 			<posx>20</posx>
@@ -2664,11 +2710,7 @@
 			<itemgap>10</itemgap>
 			<align>center</align>
 			<orientation>horizontal</orientation>
-			<onleft>9000</onleft>
-			<onright>9000</onright>
-			<onup>9000</onup>
-			<ondown>9000</ondown>
-			<visible>!Window.IsVisible(yesnodialog)</visible>
+			<visible>!Window.IsVisible(confirmdialog)</visible>
 			<control type="button" id="10">
 				<description>OK button</description>
 				<width>200</width>
@@ -2686,6 +2728,7 @@
 			</control>
 		</control>
 	</include>
+
 
 	<include name="16x9_xPos_Relocation">
 		<animation effect="slide" start="0,0" end="213,0" time="0" condition="String.IsEqual(Skin.AspectRatio,16:9)">conditional</animation>
